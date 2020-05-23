@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1091955247181",
+    "firebase_url": "https://lateral-6ce8c.firebaseio.com",
+    "project_id": "lateral-6ce8c",
+    "storage_bucket": "lateral-6ce8c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1091955247181:android:1c9a2d373de65246ccb404",
+        "android_client_info": {
+          "package_name": "tech.berjis.lateral"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1091955247181-1bufq63olivrn50i4qofdadcr34fhmkn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tech.berjis.lateral",
+            "certificate_hash": "cab4161d66aac001d1909541784ffa50b1aa4a4e"
+          }
+        },
+        {
+          "client_id": "1091955247181-qnj58e6a8llsg543tgpgjnlivqv4u77c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3r4oSheJHgKK867jjenH50Onlqlo7-WQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1091955247181-qnj58e6a8llsg543tgpgjnlivqv4u77c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
