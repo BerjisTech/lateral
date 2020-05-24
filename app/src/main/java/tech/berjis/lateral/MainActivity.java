@@ -59,6 +59,15 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_main);
 
+
+        if (firebaseDatabase == null) {
+            firebaseDatabase = FirebaseDatabase.getInstance();
+        }
+
+        mAuth = FirebaseAuth.getInstance();
+        dbRef = FirebaseDatabase.getInstance().getReference();
+        dbRef.keepSynced(true);
+
         // ini views
         btnNext = findViewById(R.id.btn_next);
         btnGetStarted = findViewById(R.id.btn_get_started);
@@ -68,13 +77,6 @@ public class MainActivity extends AppCompatActivity {
         rootView = findViewById(R.id.rootView);
         splash = findViewById(R.id.splash);
 
-        if (firebaseDatabase == null) {
-            firebaseDatabase = FirebaseDatabase.getInstance();
-        }
-
-        mAuth = FirebaseAuth.getInstance();
-        dbRef = FirebaseDatabase.getInstance().getReference();
-        dbRef.keepSynced(true);
 
         // when this activity is about to be launch we need to check if its openened before or not
 
@@ -232,26 +234,9 @@ public class MainActivity extends AppCompatActivity {
             mainActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(mainActivity);
         } else {
-            UID = mAuth.getCurrentUser().getUid();
-            dbRef.child("Users").child(UID).child("user_name").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        Intent mainActivity = new Intent(getApplicationContext(), FeedActivity.class);
-                        startActivity(mainActivity);
-                        finish();
-                    } else {
-                        Intent mainActivity = new Intent(getApplicationContext(), EditProfileActivity.class);
-                        startActivity(mainActivity);
-                        finish();
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
+            Intent mainActivity = new Intent(getApplicationContext(), FeedActivity.class);
+            startActivity(mainActivity);
+            finish();
         }
     }
 }

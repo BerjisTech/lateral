@@ -17,6 +17,10 @@ import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.signature.ObjectKey;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -145,7 +149,17 @@ public class CommentsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot selectedimage : dataSnapshot.getChildren()) {
-                        Picasso.get().load(selectedimage.child("image").getValue().toString()).into(postImage);
+                        //Picasso.get().load(selectedimage.child("image").getValue().toString()).into(postImage);
+
+                        long unixTime = System.currentTimeMillis() / 1000L;
+                        RequestOptions requestOptions = new RequestOptions().diskCacheStrategy(DiskCacheStrategy.RESOURCE).signature(new ObjectKey(unixTime));
+                        Glide.with(CommentsActivity.this)
+                                .load(selectedimage.child("image").getValue().toString())
+                                .thumbnail(Glide.with(CommentsActivity.this).load(R.drawable.preloader))
+                                .error(R.drawable.error_loading_image)
+                                .apply(requestOptions)
+                                .dontAnimate()
+                                .into(postImage);
 
                         postImage.setOnClickListener(new View.OnClickListener() {
                             @Override

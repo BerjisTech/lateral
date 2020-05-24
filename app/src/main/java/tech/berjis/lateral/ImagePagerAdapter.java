@@ -49,9 +49,17 @@ public class ImagePagerAdapter extends RecyclerView.Adapter<ImagePagerAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         ImageList ld = listData.get(position);
+
         long unixTime = System.currentTimeMillis() / 1000L;
-        RequestOptions requestOptions = new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).signature(new ObjectKey(unixTime));
-        Glide.with(holder.itemView.getContext()).load(ld.getImage()).thumbnail(0.25f).apply(requestOptions).into(holder.image);
+        RequestOptions requestOptions = new RequestOptions().diskCacheStrategy(DiskCacheStrategy.RESOURCE).signature(new ObjectKey(unixTime));
+        Glide.with(holder.itemView.getContext())
+                .load(ld.getImage())
+                .thumbnail(Glide.with(holder.itemView.getContext()).load(R.drawable.preloader))
+                .error(R.drawable.error_loading_image)
+                .apply(requestOptions)
+                .dontAnimate()
+                .into(holder.image);
+        
         if (view_type.equals("new_post")) {
             holder.delete.setVisibility(View.VISIBLE);
         }

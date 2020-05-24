@@ -41,6 +41,7 @@ public class FeedActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         dbRef = FirebaseDatabase.getInstance().getReference();
+        dbRef.keepSynced(true);
 
         home = findViewById(R.id.home);
         chats = findViewById(R.id.chats);

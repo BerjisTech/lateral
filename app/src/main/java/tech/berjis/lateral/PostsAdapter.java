@@ -78,12 +78,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         Posts ld = listData.get(position);
 
         if (view_type.equals("search")) {
-            imageChecker(ld.getPost_id(), holder);
+            imageChecker(ld, ld.getPost_id(), holder);
         }
         if (view_type.equals("main")) {
             loadUserData(ld, holder);
-            imageChecker(ld.getPost_id(), holder);
-            staticOnClicks(ld.getPost_id(), holder);
+            imageChecker(ld, ld.getPost_id(), holder);
+            staticOnClicks(ld, ld.getPost_id(), holder);
 
             if (ld.getText().equals("")) {
                 holder.postText.setVisibility(View.GONE);
@@ -125,9 +125,33 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         }
     }
 
-    private void staticOnClicks(final String post_id, final ViewHolder holder) {
+    private void staticOnClicks(final Posts ld, final String post_id, final ViewHolder holder) {
 
+        holder.userImage
+                .setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent userIntent = new Intent(mContext, UserActivity.class);
+                                Bundle userBundle = new Bundle();
+                                userBundle.putString("user", ld.getUser());
+                                userIntent.putExtras(userBundle);
+                                mContext.startActivity(userIntent);
+                            }
+                        });
         holder.comments
+                .setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent imageIntent = new Intent(mContext, CommentsActivity.class);
+                                Bundle imageBundle = new Bundle();
+                                imageBundle.putString("post_id", post_id);
+                                imageIntent.putExtras(imageBundle);
+                                mContext.startActivity(imageIntent);
+                            }
+                        });
+        holder.postText
                 .setOnClickListener(
                         new View.OnClickListener() {
                             @Override
@@ -169,7 +193,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         });
     }
 
-    private void imageChecker(final String parent, final ViewHolder holder) {
+    private void imageChecker(final Posts ld, final String parent, final ViewHolder holder) {
         dbRef.child("PostImages").child(parent).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -181,9 +205,30 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     if (images > 1) {
                         holder.imageCount.setText("+ " + images);
                     }
+                    if (view_type.equals("search")) {
+                        holder.postText.setVisibility(View.GONE);
+                    }
                 } else {
-                    holder.imageCard.setVisibility(View.GONE);
-                    holder.postImage.setVisibility(View.GONE);
+                    if (view_type.equals("main")) {
+                        holder.imageCard.setVisibility(View.GONE);
+                        holder.postImage.setVisibility(View.GONE);
+                    }
+                    if (view_type.equals("search")) {
+                        holder.postImage.setVisibility(View.GONE);
+                        holder.postText.setText(ld.getText());
+                        holder.postText
+                                .setOnClickListener(
+                                        new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                Intent imageIntent = new Intent(mContext, CommentsActivity.class);
+                                                Bundle imageBundle = new Bundle();
+                                                imageBundle.putString("post_id", parent);
+                                                imageIntent.putExtras(imageBundle);
+                                                mContext.startActivity(imageIntent);
+                                            }
+                                        });
+                    }
                 }
             }
 
@@ -202,7 +247,16 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     for (DataSnapshot selectedimage : dataSnapshot.getChildren()) {
                         long unixTime = System.currentTimeMillis() / 1000L;
                         RequestOptions requestOptions = new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).signature(new ObjectKey(unixTime));
-                        Glide.with(mContext).load(selectedimage.child("image").getValue().toString()).thumbnail(0.25f).apply(requestOptions).into(holder.postImage);
+
+                        Glide
+                                .with(mContext)
+                                .load(selectedimage.child("image").getValue().toString())
+                                .thumbnail(Glide.with(mContext).load(R.drawable.preloader))
+                                .centerCrop()
+                                .apply(requestOptions)
+                                .error(R.drawable.error_loading_image)
+                                .into(holder.postImage);
+
                         if (view_type.equals("search")) {
                             holder.postImage.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -249,7 +303,17 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 String userimage = dataSnapshot.child("user_image").getValue().toString();
 
                 if (!userimage.equals("")) {
-                    Picasso.get().load(userimage).into(holder.userImage);
+                    long unixTime = System.currentTimeMillis() / 1000L;
+                    RequestOptions requestOptions = new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).signature(new ObjectKey(unixTime));
+
+                    Glide
+                            .with(mContext)
+                            .load(userimage)
+                            .thumbnail(Glide.with(mContext).load(R.drawable.preloader))
+                            .centerCrop()
+                            .apply(requestOptions)
+                            .error(R.drawable.error_loading_image)
+                            .into(holder.userImage);
                 }
                 if (!username.equals("")) {
                     holder.userName.setText(username);

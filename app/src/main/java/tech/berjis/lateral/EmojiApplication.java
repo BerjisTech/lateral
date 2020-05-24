@@ -5,6 +5,7 @@ import android.os.StrictMode;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.ios.IosEmojiProvider;
 
@@ -24,5 +25,6 @@ public class EmojiApplication extends Application {
             StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().build());
         }
 
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 }
