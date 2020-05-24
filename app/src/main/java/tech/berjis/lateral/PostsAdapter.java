@@ -127,6 +127,30 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     private void staticOnClicks(final Posts ld, final String post_id, final ViewHolder holder) {
 
+        holder.userName
+                .setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent userIntent = new Intent(mContext, UserActivity.class);
+                                Bundle userBundle = new Bundle();
+                                userBundle.putString("user", ld.getUser());
+                                userIntent.putExtras(userBundle);
+                                mContext.startActivity(userIntent);
+                            }
+                        });
+        holder.postTime
+                .setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent userIntent = new Intent(mContext, UserActivity.class);
+                                Bundle userBundle = new Bundle();
+                                userBundle.putString("user", ld.getUser());
+                                userIntent.putExtras(userBundle);
+                                mContext.startActivity(userIntent);
+                            }
+                        });
         holder.userImage
                 .setOnClickListener(
                         new View.OnClickListener() {

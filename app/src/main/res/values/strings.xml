@@ -52,4 +52,7 @@
     <string name="delete_for_all">Delete for all</string>
     <string name="this_name_will_be_used_to_create_your_avatar_a_fake_you_to_help_you_use_the_app_anonymously_the_username_will_be_used_to_create_a_lynn_app_email_to_use_within_the_app_n_nyour_security_is_our_concer">This name will be used to create your avatar. A fake you to help you use the app anonymously the username will be used to create a lynn app email to use within the app\n\nYOUR SECURITY IS OUR CONCER</string>
     <string name="choose_a_username">Choose a username</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
