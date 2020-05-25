@@ -11,6 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.signature.ObjectKey;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -93,7 +97,17 @@ public class ProfileActivity extends AppCompatActivity {
                 full_name.setText(fullname);
 
                 if (dataSnapshot.child("user_image").exists() && !dataSnapshot.child("user_image").getValue().toString().equals("")) {
-                    Picasso.get().load(dataSnapshot.child("user_image").getValue().toString()).error(R.drawable.logo).into(dp);
+                    long unixTime = System.currentTimeMillis() / 1000L;
+                    RequestOptions requestOptions = new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).signature(new ObjectKey(unixTime));
+
+                    Glide
+                            .with(ProfileActivity.this)
+                            .load(dataSnapshot.child("user_image").getValue().toString())
+                            .thumbnail(Glide.with(ProfileActivity.this).load(R.drawable.preloader))
+                            .centerCrop()
+                            .apply(requestOptions)
+                            .error(R.drawable.error_loading_image)
+                            .into(dp);
                 }
             }
 

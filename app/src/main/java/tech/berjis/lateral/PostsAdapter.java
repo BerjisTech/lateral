@@ -275,7 +275,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                         Glide
                                 .with(mContext)
                                 .load(selectedimage.child("image").getValue().toString())
-                                .thumbnail(Glide.with(mContext).load(R.drawable.preloader))
+                                .placeholder(R.drawable.grey)
+                                //.thumbnail(Glide.with(mContext).load(R.drawable.preloader))
+                                .thumbnail(0.25f)
                                 .centerCrop()
                                 .apply(requestOptions)
                                 .error(R.drawable.error_loading_image)
