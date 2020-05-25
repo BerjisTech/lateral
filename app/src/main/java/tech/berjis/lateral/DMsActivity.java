@@ -98,7 +98,7 @@ public class DMsActivity extends AppCompatActivity {
                         listData.add(l);
                     }
                     Collections.reverse(listData);
-                    adapter = new ChatsAdapter(listData);
+                    adapter = new ChatsAdapter(DMsActivity.this, listData);
                     rv.setAdapter(adapter);
                     //rv.scrollToPosition(listData.size() - 1);
 

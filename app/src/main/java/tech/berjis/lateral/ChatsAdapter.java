@@ -1,5 +1,6 @@
 package tech.berjis.lateral;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -14,6 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.signature.ObjectKey;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,9 +41,11 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
     private List<String> listData;
     private FirebaseAuth mAuth;
     private DatabaseReference dbRef;
+    private Context mContext;
 
-    public ChatsAdapter(List<String> listData) {
+    ChatsAdapter(Context mContext, List<String> listData) {
         this.listData = listData;
+        this.mContext = mContext;
     }
 
     @NonNull
@@ -64,7 +71,17 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.child("user_image").exists() && !dataSnapshot.child("user_image").getValue().toString().isEmpty()) {
-                    Picasso.get().load(dataSnapshot.child("user_image").getValue().toString()).into(holder.userImage);
+                    long unixTime = System.currentTimeMillis() / 1000L;
+                    RequestOptions requestOptions = new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).signature(new ObjectKey(unixTime));
+
+                    Glide
+                            .with(mContext)
+                            .load(dataSnapshot.child("user_image").getValue().toString())
+                            .thumbnail(Glide.with(mContext).load(R.drawable.preloader))
+                            .centerCrop()
+                            .apply(requestOptions)
+                            .error(R.drawable.error_loading_image)
+                            .into(holder.userImage);
                 }
                 if (dataSnapshot.child("user_name").exists()) {
                     holder.userName.setText(dataSnapshot.child("user_name").getValue().toString());

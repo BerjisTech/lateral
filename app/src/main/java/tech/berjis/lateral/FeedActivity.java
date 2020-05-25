@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,9 +37,11 @@ public class FeedActivity extends AppCompatActivity {
 
     static ConstraintLayout mainLayout, storyLayout;
     static String story = "";
+    ConstraintLayout root_view;
     ImageView home, chats, profile, camera, notifications, search, video;
-    RecyclerView postsRecycler, iconsRecycler;
+    RecyclerView postsRecycler, iconsRecycler, cardsRecycler;
     SwipeRefreshLayout pageRefresh;
+    NestedScrollView nestedScrollView;
 
     FirebaseAuth mAuth;
     DatabaseReference dbRef;
@@ -69,6 +73,8 @@ public class FeedActivity extends AppCompatActivity {
         pageRefresh = findViewById(R.id.pageRefresh);
         mainLayout = findViewById(R.id.mainLayout);
         storyLayout = findViewById(R.id.storyLayout);
+        root_view = findViewById(R.id.root_view);
+        nestedScrollView = findViewById(R.id.nestedScrollView);
         unloggedState();
 
         listData = new ArrayList<>();
@@ -80,6 +86,58 @@ public class FeedActivity extends AppCompatActivity {
         loadIcons();
         loadPosts();
         pageRefresher();
+        swipeListener();
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void swipeListener() {
+        root_view.setOnTouchListener(new OnSwipeTouchListener(FeedActivity.this) {
+
+            public void onSwipeRight() {
+                root_view.animate()
+                        .translationX(root_view.getWidth() / 5)
+                        .setDuration(150)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                root_view.animate()
+                                        .translationX(0)
+                                        .setDuration(150)
+                                        .setListener(new AnimatorListenerAdapter() {
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+                                                super.onAnimationEnd(animation);
+
+                                            }
+                                        });
+                            }
+                        });
+            }
+
+            public void onSwipeLeft() {
+                root_view.animate()
+                        .translationX(-root_view.getWidth() / 5)
+                        .setDuration(150)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                root_view.animate()
+                                        .translationX(0)
+                                        .setDuration(150)
+                                        .setListener(new AnimatorListenerAdapter() {
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+                                                super.onAnimationEnd(animation);
+
+                                            }
+                                        });
+                            }
+                        });
+            }
+
+        });
     }
 
     private void pageRefresher() {
