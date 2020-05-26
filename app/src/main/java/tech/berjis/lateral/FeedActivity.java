@@ -1,15 +1,5 @@
 package tech.berjis.lateral;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
@@ -20,7 +10,14 @@ import android.os.Handler;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -37,9 +34,9 @@ public class FeedActivity extends AppCompatActivity {
 
     static ConstraintLayout mainLayout, storyLayout;
     static String story = "";
-    ConstraintLayout root_view;
-    ImageView home, chats, profile, camera, notifications, search, video;
-    RecyclerView postsRecycler, iconsRecycler, cardsRecycler;
+    ConstraintLayout root_view, rightPanel;
+    ImageView home, chats, profile, camera, notifications, search, video, up, down, schools, jobs, jobSettings;
+    RecyclerView postsRecycler, iconsRecycler;
     SwipeRefreshLayout pageRefresh;
     NestedScrollView nestedScrollView;
 
@@ -57,6 +54,11 @@ public class FeedActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_feed);
 
+        up = findViewById(R.id.up);
+        down = findViewById(R.id.down);
+        rightPanel = findViewById(R.id.rightPanel);
+        hideRightPanel();
+
         mAuth = FirebaseAuth.getInstance();
         dbRef = FirebaseDatabase.getInstance().getReference();
         dbRef.keepSynced(true);
@@ -65,6 +67,9 @@ public class FeedActivity extends AppCompatActivity {
         chats = findViewById(R.id.chats);
         profile = findViewById(R.id.profile);
         camera = findViewById(R.id.camera);
+        jobs = findViewById(R.id.jobs);
+        schools = findViewById(R.id.schools);
+        jobSettings = findViewById(R.id.jobSettings);
         notifications = findViewById(R.id.notifications);
         search = findViewById(R.id.search);
         video = findViewById(R.id.video);
@@ -83,14 +88,74 @@ public class FeedActivity extends AppCompatActivity {
         postsRecycler.setHasFixedSize(true);
         iconsRecycler.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         iconsRecycler.setHasFixedSize(true);
+        up.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showRightPanel();
+            }
+        });
+        down.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideRightPanel();
+            }
+        });
         loadIcons();
         loadPosts();
         pageRefresher();
         swipeListener();
     }
 
+    private void showRightPanel() {
+        rightPanel.setVisibility(View.VISIBLE);
+        rightPanel.animate()
+                .translationY(0)
+                .alpha(1.0f)
+                .setDuration(300)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        up.setVisibility(View.GONE);
+                        down.setVisibility(View.VISIBLE);
+                    }
+                });
+    }
+
+    private void hideRightPanel() {
+        rightPanel.animate()
+                .translationY(rightPanel.getHeight())
+                .alpha(0.0f)
+                .setDuration(300)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        up.setVisibility(View.VISIBLE);
+                        down.setVisibility(View.GONE);
+                        rightPanel.setVisibility(View.GONE);
+                    }
+                });
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private void swipeListener() {
+        rightPanel.setOnTouchListener(new OnSwipeTouchListener(FeedActivity.this) {
+            public void onSwipeTop() {
+            }
+
+            public void onSwipeRight() {
+            }
+
+            public void onSwipeLeft() {
+            }
+
+            public void onSwipeBottom() {
+                hideRightPanel();
+            }
+
+        });
+
         root_view.setOnTouchListener(new OnSwipeTouchListener(FeedActivity.this) {
 
             public void onSwipeRight() {
@@ -136,6 +201,15 @@ public class FeedActivity extends AppCompatActivity {
                             }
                         });
             }
+
+            public void onSwipeBottom() {
+                hideRightPanel();
+            }
+
+            public void onSwipeTop() {
+                showRightPanel();
+            }
+
 
         });
     }
@@ -211,6 +285,27 @@ public class FeedActivity extends AppCompatActivity {
                     startActivity(new Intent(FeedActivity.this, RegisterActivity.class));
                 }
             });
+            jobs.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(FeedActivity.this, RegisterActivity.class));
+                    hideRightPanel();
+                }
+            });
+            jobSettings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(FeedActivity.this, RegisterActivity.class));
+                    hideRightPanel();
+                }
+            });
+            schools.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(FeedActivity.this, RegisterActivity.class));
+                    hideRightPanel();
+                }
+            });
         } else {
             home.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -245,6 +340,27 @@ public class FeedActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     startActivity(new Intent(FeedActivity.this, SearchActivity.class));
+                }
+            });
+            jobs.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(FeedActivity.this, JobsActivity.class));
+                    hideRightPanel();
+                }
+            });
+            jobSettings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(FeedActivity.this, JobsSettingsActivity.class));
+                    hideRightPanel();
+                }
+            });
+            schools.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(FeedActivity.this, SchoolsActivity.class));
+                    hideRightPanel();
                 }
             });
         }
@@ -334,4 +450,5 @@ public class FeedActivity extends AppCompatActivity {
                     }
                 });
     }
+
 }

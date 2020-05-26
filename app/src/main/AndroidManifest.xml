@@ -25,7 +25,10 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppCustomTheme.NoActionBar">
-        <activity android:name=".UserActivity"></activity>
+        <activity android:name=".SchoolsActivity"></activity>
+        <activity android:name=".JobsSettingsActivity" />
+        <activity android:name=".JobsActivity" />
+        <activity android:name=".UserActivity" />
         <activity
             android:name=".SearchActivity"
             android:screenOrientation="portrait"
