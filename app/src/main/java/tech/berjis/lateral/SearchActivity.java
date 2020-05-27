@@ -1,25 +1,22 @@
 package tech.berjis.lateral;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -55,14 +52,14 @@ public class SearchActivity extends AppCompatActivity {
         magImage.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
 
         PostsList = new ArrayList<>();
-        StaggeredGridLayoutManager sgManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        /*StaggeredGridLayoutManager sgManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         sgManager.setReverseLayout(false);
-        sgManager.scrollToPositionWithOffset(0, 0);
-        PostsRecycler.setLayoutManager(sgManager);
+        sgManager.scrollToPositionWithOffset(0, 0);*/
+        PostsRecycler.setLayoutManager(new GridLayoutManager(this, 2));
         PostsRecycler.setHasFixedSize(true);
         PostsRecycler.setAdapter(PostsAdapter);
 
-        loadPosts(" ");
+        loadPosts("");
 
         final CountDownTimer c_timer = new CountDownTimer(50000, 2000) {
             @Override

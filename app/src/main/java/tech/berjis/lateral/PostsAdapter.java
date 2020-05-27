@@ -2,18 +2,15 @@ package tech.berjis.lateral;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -30,7 +27,6 @@ import com.squareup.picasso.Picasso;
 import com.vanniktech.emoji.EmojiTextView;
 
 import org.ocpsoft.prettytime.PrettyTime;
-import org.w3c.dom.Text;
 
 import java.util.Date;
 import java.util.List;
@@ -272,12 +268,18 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                         long unixTime = System.currentTimeMillis() / 1000L;
                         RequestOptions requestOptions = new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).signature(new ObjectKey(unixTime));
 
+                        /*Picasso
+                                .get()
+                                .load(selectedimage.child("image").getValue().toString())
+                                .placeholder(R.drawable.progress_animation)
+                                .networkPolicy(NetworkPolicy.OFFLINE)
+                                .into(holder.postImage);*/
                         Glide
                                 .with(mContext)
                                 .load(selectedimage.child("image").getValue().toString())
                                 .placeholder(R.drawable.grey)
-                                //.thumbnail(Glide.with(mContext).load(R.drawable.preloader))
-                                .thumbnail(0.25f)
+                                .thumbnail(Glide.with(mContext).load(R.drawable.preloader))
+                                //.thumbnail(0.25f)
                                 .centerCrop()
                                 .apply(requestOptions)
                                 .error(R.drawable.error_loading_image)
