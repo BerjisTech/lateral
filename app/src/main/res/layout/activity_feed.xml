@@ -21,7 +21,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/dynamicWhite"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginLeft="20dp"
@@ -43,7 +42,6 @@
                 android:focusable="true">
 
                 <TextView
-                    android:id="@+id/pageTitle"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:clickable="true"
@@ -132,7 +130,6 @@
                     android:layout_height="wrap_content">
 
                     <View
-                        android:id="@+id/midView"
                         android:layout_width="0.001dp"
                         android:layout_height="0.001dp"
                         app:layout_constraintBottom_toBottomOf="parent"

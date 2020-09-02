@@ -1,15 +1,13 @@
 package tech.berjis.lateral;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -21,7 +19,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 import com.vanniktech.emoji.EmojiTextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -39,7 +36,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_profile);
 
         mAuth = FirebaseAuth.getInstance();
@@ -55,7 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
         full_name = findViewById(R.id.full_name);
         dp = findViewById(R.id.dp);
 
-        loaduserdata();
+        newUserState();
         staticOnclicks();
     }
 
@@ -87,7 +84,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void loaduserdata() {
-        newUserState();
         dbRef.child("Users").child(UID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -122,10 +118,12 @@ public class ProfileActivity extends AppCompatActivity {
         dbRef.child("Users").child(UID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.child("first_name").exists() ||
-                        !dataSnapshot.child("last_name").exists() ||
-                        !dataSnapshot.child("user_name").exists() ||
-                        !dataSnapshot.child("user_email").exists()) {
+                if (dataSnapshot.child("first_name").exists() &&
+                        dataSnapshot.child("last_name").exists() &&
+                        dataSnapshot.child("user_name").exists() &&
+                        dataSnapshot.child("user_email").exists()) {
+                    loaduserdata();
+                }else{
                     startActivity(new Intent(ProfileActivity.this, EditProfileActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                 }
             }

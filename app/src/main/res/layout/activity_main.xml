@@ -27,7 +27,7 @@
         android:drawableRight="@drawable/ic_arrow_forward_black_24dp"
         android:drawableTint="@color/colorWhite"
         android:paddingEnd="5dp"
-        android:text="@string/next"
+        android:text="NEXT"
         android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

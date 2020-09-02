@@ -7,7 +7,6 @@
     tools:context=".ProfileActivity">
 
     <TextView
-        android:id="@+id/pageTitle"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
@@ -43,7 +42,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/detailsCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
@@ -117,7 +115,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/username" />
 
             <TextView
-                android:id="@+id/videosText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -140,7 +137,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/username" />
 
             <TextView
-                android:id="@+id/requestsText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"

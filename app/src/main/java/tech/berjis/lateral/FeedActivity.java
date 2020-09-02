@@ -42,6 +42,7 @@ public class FeedActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     DatabaseReference dbRef;
+    String UID;
 
     List<Posts> listData;
     List<Icons> icons;
@@ -62,6 +63,7 @@ public class FeedActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         dbRef = FirebaseDatabase.getInstance().getReference();
         dbRef.keepSynced(true);
+        UID = mAuth.getCurrentUser().getUid();
 
         home = findViewById(R.id.home);
         chats = findViewById(R.id.chats);
@@ -100,8 +102,9 @@ public class FeedActivity extends AppCompatActivity {
                 hideRightPanel();
             }
         });
+
+        newUserState();
         loadIcons();
-        loadPosts();
         pageRefresher();
         swipeListener();
     }
@@ -449,6 +452,27 @@ public class FeedActivity extends AppCompatActivity {
                         super.onAnimationEnd(animation);
                     }
                 });
+    }
+
+    private void newUserState() {
+        dbRef.child("Users").child(UID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.child("first_name").exists() ||
+                        !dataSnapshot.child("last_name").exists() ||
+                        !dataSnapshot.child("user_name").exists() ||
+                        !dataSnapshot.child("user_email").exists()) {
+                    startActivity(new Intent(FeedActivity.this, EditProfileActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                } else {
+                    loadPosts();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

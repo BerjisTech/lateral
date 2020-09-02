@@ -38,7 +38,6 @@
         app:layout_constraintTop_toBottomOf="@+id/textView11">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/pageScroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -258,7 +257,6 @@
                 app:layout_constraintTop_toBottomOf="@id/div_6" />
 
             <View
-                android:id="@+id/div_7"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="5dp"

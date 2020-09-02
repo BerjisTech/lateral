@@ -1,33 +1,19 @@
 package tech.berjis.lateral;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.signature.ObjectKey;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.tabs.TabItem;
-import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,7 +24,6 @@ import com.vanniktech.emoji.EmojiTextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public class UserActivity extends AppCompatActivity {
 
@@ -96,12 +81,7 @@ public class UserActivity extends AppCompatActivity {
                 startActivity(new Intent(UserActivity.this, FeedActivity.class));
             }
         });
-        chats.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(UserActivity.this, DMsActivity.class));
-            }
-        });
+
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +96,21 @@ public class UserActivity extends AppCompatActivity {
         user = userBundle.getString("user");
 
         loadUserData(user);
+
+        chats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserActivity.this, DMActivity.class);
+
+                Bundle extras = new Bundle();
+
+                extras.putString("user", user);
+
+                intent.putExtras(extras);
+
+                startActivity(intent);
+            }
+        });
     }
 
     private void loadUserData(String mUser) {
